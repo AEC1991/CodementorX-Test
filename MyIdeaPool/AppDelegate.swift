@@ -11,7 +11,6 @@ import IQKeyboardManagerSwift
 import SVProgressHUD
 
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

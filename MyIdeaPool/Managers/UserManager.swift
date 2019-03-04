@@ -30,5 +30,10 @@ class UserManager: NSObject {
             standard.set(newValue, forKey: "isLogined")
         }
     }
+    
 
 }
+
+
+
+

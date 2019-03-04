@@ -84,6 +84,7 @@ class MainViewController: UIViewController {
         }
     }
     
+    
     func refresh() {
         if ideas.count > 0 {
             viewEmpty.isHidden = true
@@ -93,7 +94,7 @@ class MainViewController: UIViewController {
             viewIdeas.isHidden = true
         }
         tableviewIdeas.reloadData()
-        if isAdding == true {
+        if isAdding == true, ideas.count > 0 {
             tableviewIdeas.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         }
     }
