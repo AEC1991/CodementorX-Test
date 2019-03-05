@@ -45,7 +45,7 @@ class IdeaViewController: UIViewController {
         lblImpact.text = "\(idea?.impact ?? 10 )"
         lblEase.text = "\(idea?.ease ?? 10 )"
         lblConfidence.text = "\(idea?.confidence ?? 10 )"
-        lblAvg.text = "\(((idea?.average_score) != nil) ? String(format: "%.1f", idea!.average_score!) : "10" )"
+        lblAvg.text = "\(((idea?.average_score) != nil) ? String(format: "%.1f", idea!.average_score!) : getAverageScore())"
     }
     
     private func isValid() -> Bool {
@@ -80,6 +80,27 @@ class IdeaViewController: UIViewController {
         }
         return result
     }
+    
+    private func getDownScore(current : String) ->  String {
+        var result = current
+        var score = (Int(current) ?? 10) - 1
+        if score < 1 {
+            score = 10
+        }
+        result = "\(score)"
+        
+        return result
+    }
+    
+    private func getAverageScore() -> String {
+        var result = "10"
+        let impact = Float (lblImpact.text ?? "10") ?? 10
+        let ease = Float (lblEase.text ?? "10") ?? 10
+        let confidence = Float ( lblConfidence.text ?? "10") ?? 10
+        result = String(format: "%.1f", (impact + ease + confidence) / 3.0)
+
+        return result
+    }
 
     
     
@@ -110,4 +131,18 @@ class IdeaViewController: UIViewController {
     @IBAction func actionBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func actionImpact(_ sender: UIButton) {
+        lblImpact.text = getDownScore(current: lblImpact.text ?? "10")
+        lblAvg.text = getAverageScore()
+    }
+    @IBAction func actionEase(_ sender: Any) {
+        lblEase.text = getDownScore(current: lblEase.text ?? "10")
+        lblAvg.text = getAverageScore()
+    }
+    @IBAction func actionConfidence(_ sender: Any) {
+        lblConfidence.text = getDownScore(current: lblConfidence.text ?? "10")
+        lblAvg.text = getAverageScore()
+    }
+    
 }

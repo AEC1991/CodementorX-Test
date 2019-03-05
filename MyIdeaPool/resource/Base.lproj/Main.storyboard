@@ -562,6 +562,9 @@
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="56" id="0yG-K8-swe"/>
                                                                         </constraints>
+                                                                        <connections>
+                                                                            <action selector="actionImpact:" destination="KrY-va-OI2" eventType="touchUpInside" id="hA1-ll-PdX"/>
+                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -617,6 +620,9 @@
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="56" id="sPd-Ly-cvi"/>
                                                                         </constraints>
+                                                                        <connections>
+                                                                            <action selector="actionEase:" destination="KrY-va-OI2" eventType="touchUpInside" id="7ce-uc-X7S"/>
+                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -672,6 +678,9 @@
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="56" id="qCm-SQ-ZYO"/>
                                                                         </constraints>
+                                                                        <connections>
+                                                                            <action selector="actionConfidence:" destination="KrY-va-OI2" eventType="touchUpInside" id="s8e-HU-GG1"/>
+                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -715,7 +724,7 @@
                                                                         <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_dropDown" translatesAutoresizingMaskIntoConstraints="NO" id="Quf-Aw-AMH">
+                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_dropDown" translatesAutoresizingMaskIntoConstraints="NO" id="Quf-Aw-AMH">
                                                                         <rect key="frame" x="289.5" y="14" width="15.5" height="16"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" secondItem="Quf-Aw-AMH" secondAttribute="height" multiplier="21:22" id="BqK-cl-KOl"/>
