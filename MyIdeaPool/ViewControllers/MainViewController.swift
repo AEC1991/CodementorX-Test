@@ -64,7 +64,7 @@ class MainViewController: UIViewController {
                         self.ideas.append(item)
                     }
                 })
-                
+                // Sorting by created date
                 self.ideas.sort(by: { (first, second) -> Bool in
                     if first.created_at! > second.created_at! {
                         return true
@@ -72,7 +72,16 @@ class MainViewController: UIViewController {
                         return false
                     }
                 })
-                
+
+                // Sorting by average score
+                self.ideas.sort(by: { (first, second) -> Bool in
+                    if first.average_score! > second.average_score! {
+                        return true
+                    }else {
+                        return false
+                    }
+                })
+
                 if newIdeas!.count > 0 {
                     self.currentPage = page
                 }
