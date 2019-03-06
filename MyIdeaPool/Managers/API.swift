@@ -192,7 +192,6 @@ class API: NSObject {
                             if progressHUD == true {
                                 SVProgressHUD.dismiss()
                             }
-                            
                             if dataResponse.response?.statusCode == StateCode.success.rawValue {
                                 var result = [Idea]()
                                 if let array = dataResponse.value as? [[String:Any]] {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class MainViewController: UIViewController {
 
@@ -15,8 +16,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var tableviewIdeas: UITableView!
     
     var ideas = [Idea]()
-    var currentPage : Int = 1
-    var isAdding = false
+    var lastPage : Int = 1
     
     // MARK: ------------ VC Life Cycle ----------------
 
@@ -30,7 +30,7 @@ class MainViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getIdeas(page: currentPage)
+        getAllPages()
     }
     /*
     // MARK: - Navigation
@@ -47,7 +47,43 @@ class MainViewController: UIViewController {
         tableviewIdeas.contentInset = UIEdgeInsets.init(top: 20, left: 0, bottom: 150, right: 0)
     }
     
-    func getIdeas(page: Int, progressHUD : Bool? = true) {
+    func getAllPages() {
+        struct Holder {
+            static var page = 1
+        }
+        SVProgressHUD.show()
+        API.shared.getIdeas(page: Holder.page, progressHUD: false) { (newIdeas, err) in
+            if newIdeas != nil {
+                newIdeas!.forEach({ (item) in
+                    if let existIdea = self.ideas.filter({ (idea) -> Bool in
+                        if idea.id == item.id {
+                            return true
+                        }else {
+                            return false
+                        }
+                    }).first {
+                        existIdea.setWith(idea: item)
+                    }else {
+                        self.ideas.append(item)
+                    }
+                })
+                if Holder.page == self.lastPage {
+                    SVProgressHUD.dismiss()
+                    self.refresh()
+                    Holder.page = 1
+                }else {
+                    Holder.page += 1
+                    self.getAllPages()
+                }
+            }else if err != nil {
+                SVProgressHUD.dismiss()
+                self.showAlert(message: err!)
+                Holder.page = 1
+            }
+        }
+
+    }
+    func getPage(page: Int, progressHUD : Bool? = true) {
         
         API.shared.getIdeas(page: page, progressHUD: progressHUD) { (newIdeas, err) in
             if newIdeas != nil {
@@ -64,28 +100,6 @@ class MainViewController: UIViewController {
                         self.ideas.append(item)
                     }
                 })
-                // Sorting by created date
-                self.ideas.sort(by: { (first, second) -> Bool in
-                    if first.created_at! > second.created_at! {
-                        return true
-                    }else {
-                        return false
-                    }
-                })
-
-                // Sorting by average score
-                self.ideas.sort(by: { (first, second) -> Bool in
-                    if first.average_score! > second.average_score! {
-                        return true
-                    }else {
-                        return false
-                    }
-                })
-
-                if newIdeas!.count > 0 {
-                    self.currentPage = page
-                }
-
             }else if err != nil {
                 self.showAlert(message: err!)
             }
@@ -96,16 +110,37 @@ class MainViewController: UIViewController {
     
     func refresh() {
         if ideas.count > 0 {
+            // Sorting by created date
+            self.ideas.sort(by: { (first, second) -> Bool in
+                if first.created_at! > second.created_at! {
+                    return true
+                }else {
+                    return false
+                }
+            })
+            
+            // Sorting by average score
+            self.ideas.sort(by: { (first, second) -> Bool in
+                if first.average_score! > second.average_score! {
+                    return true
+                }else {
+                    return false
+                }
+            })
+
             viewEmpty.isHidden = true
             viewIdeas.isHidden = false
+
         }else {
             viewEmpty.isHidden = false
             viewIdeas.isHidden = true
         }
-        tableviewIdeas.reloadData()
-        if isAdding == true, ideas.count > 0 {
-            tableviewIdeas.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        
+        lastPage = ideas.count / 10 + (ideas.count % 10 == 0 ? 0 : 1)
+        if lastPage < 1 {
+           lastPage = 1
         }
+        tableviewIdeas.reloadData()
     }
 
 
@@ -125,8 +160,6 @@ class MainViewController: UIViewController {
         
     }
     @IBAction func actionPlus(_ sender: Any) {
-        currentPage = 1
-        isAdding = true
     }
     
 }
@@ -153,8 +186,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         if scrollView == tableviewIdeas{
             if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height)
             {
-                isAdding = false
-                getIdeas(page: currentPage + 1, progressHUD: false)
+                getPage(page: lastPage + 1, progressHUD: false)
             }
         }
     }
@@ -163,7 +195,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
 extension MainViewController : IdeaTableCellDelegate {
     
     func didSelectedEdit(idea: Idea) {
-        self.isAdding = false
         let alertController = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
         
         let editButton = UIAlertAction(title: "Edit", style: .default, handler: { (action) -> Void in
